@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <script src="js/pace.js"></script>
+    <link href="css/pace.css" rel="stylesheet"/>
+
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet"/>
+
+     <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+          rel="stylesheet">
+
+    <!--<link href="/css/main.css" rel="stylesheet">-->
+    <!-- <link href="/css/meshop.css?v=1.0.0" rel="stylesheet" />-->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="/css/awesome-bootstrap-checkbox.css" rel="stylesheet"/>
+
+
+</head>
+<body class="container">
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li aria-current="page" class="breadcrumb-item active">Home</li>
+    </ol>
+</nav>
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <input class="input-md" name="count" type="number" value="500"/>
+        </div>
+        <div class="col-md-6 form-group">
+            <input class="input-md" name="filter" placeholder="filter"
+                   style="width: 100%;" type="text" value="اطلاعات و صورت‌های مالی میاندوره‌ای"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 btn-group">
+           <button class="btnStep1 btn btn-success" type="button" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Fetching Data">
+                <i class="fa fa-arrow-down"> 1.Get Exchange Records</i>
+           </button>
+            <a class="btn btn-primary" href="/excel" target="_blank" type="button"><i class="fa fa-file-excel-o"> Download Excel</i></a>
+
+            <button class="btnStep2 btn btn-success" type="button" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Fetching Data">
+                <i class="fa fa-arrow-down"> 2.Get Details</i>
+            </button>
+        </div>
+
+    </div>
+
+
+<script crossorigin="anonymous" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<script src="js/meshop.js?v=1.0.0"></script>
+<script>
+    $(document).ready(function () {
+
+        $(".btnStep1").on("click", function (e) {
+            e.preventDefault();
+            let $this = $(this);
+            let loadingText = '<i class="fa fa-circle-o-notch fa-spin"></i> loading...';
+            if ($(this).html() !== loadingText) {
+                $this.data('original-text', $(this).html());
+                $this.html(loadingText);
+            }
+
+
+            let json = {
+                count: $("[name=count]").val(),
+                filter: $("[name=filter]").val()
+            };
+            $.ajax({
+                type: "POST",
+                url: "/step1",
+                data: JSON.stringify(json),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                accepts: "application/json; charset=utf-8",
+                success: function (data) {
+                    meshop.log("ok", "با موفقیت انجام شد");
+                    setTimeout(function() {
+                        $this.html($this.data('original-text'));
+                    }, 2000);
+                },
+                error: function (err) {
+                    meshop.log("fail", "خطا در سیستم");
+                    console.log(err);
+                    setTimeout(function() {
+                        $this.html($this.data('original-text'));
+                    }, 2000);
+                },
+                always: function(e){
+
+                }
+            });
+        });
+
+        $(".btnStep2").on("click", function (e) {
+            e.preventDefault();
+            let $this = $(this);
+            let loadingText = '<i class="fa fa-circle-o-notch fa-spin"></i> loading...';
+            if ($(this).html() !== loadingText) {
+                $this.data('original-text', $(this).html());
+                $this.html(loadingText);
+            }
+
+
+            let json = {
+                count: $("[name=count]").val(),
+                filter: $("[name=filter]").val()
+            };
+            $.ajax({
+                type: "POST",
+                url: "/step2",
+                //data: JSON.stringify(json),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                accepts: "application/json; charset=utf-8",
+                success: function (data) {
+                    meshop.log("ok", "با موفقیت انجام شد");
+                    setTimeout(function() {
+                        $this.html($this.data('original-text'));
+                    }, 2000);
+                },
+                error: function (err) {
+                    meshop.log("fail", "خطا در سیستم");
+                    console.log(err);
+                    setTimeout(function() {
+                        $this.html($this.data('original-text'));
+                    }, 2000);
+                },
+                always: function(e){
+
+                }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>
